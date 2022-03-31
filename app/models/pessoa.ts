@@ -1,0 +1,8 @@
+export class Pessoa {
+
+    constructor(
+        readonly nome: string,
+        readonly peso: number,
+        readonly altura: number,
+    ) {}
+}
