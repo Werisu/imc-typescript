@@ -1,12 +1,7 @@
 import { Pessoas } from "../models/pessoas.js";
+import { View } from "./view.js";
 
-export class PessoasView {
-    
-  private elemento: HTMLElement;
-
-  constructor(seletor: string) {
-    this.elemento = document.querySelector(seletor);
-  }
+export class PessoasView extends View<Pessoas>{
 
   template(model: Pessoas): string {
     return `
@@ -35,11 +30,5 @@ export class PessoasView {
             </tbody>
         </table>
         `;
-  }
-
-  update(model: Pessoas): void {
-    const template = this.template(model);
-    console.log(template);
-    this.elemento.innerHTML = template;
   }
 }
