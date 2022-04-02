@@ -1,26 +1,27 @@
 import { Pessoas } from './../models/pessoas.js';
 import { Pessoa } from "../models/pessoa.js";
+import { PessoasView } from '../views/pessoas-view.js';
 
 export class ImcController {
   private nome: HTMLInputElement;
   private peso: HTMLInputElement;
   private altura: HTMLInputElement;
-  
-  private pessoas = new Pessoas;
-  
   public imc: number;
+  public data: Date;
+  private pessoas = new Pessoas();
+  private pessoasView = new PessoasView('#pessoasView');
 
   constructor() {
     this.nome = document.querySelector("#nome");
     this.peso = document.querySelector("#peso");
     this.altura = document.querySelector("#altura");
+    this.pessoasView.update(this.pessoas);
   }
 
   adiciona(): void {
     const pessoa = this.criarPessoa();
     this.pessoas.adiciona(pessoa);
-    console.log(this.pessoas.lista())
-    console.log(pessoa.imc);
+    this.pessoasView.update(this.pessoas);
     this.limparFormulario();
   }
 
@@ -28,8 +29,9 @@ export class ImcController {
     const nome = this.nome.value;
     const peso = parseFloat(this.peso.value);
     const altura = parseFloat(this.altura.value);
-    var imc = this.calcula(peso, altura);
-    return new Pessoa(nome, peso, altura, imc);
+    const imc = this.calcula(peso, altura);
+    const data = new Date();
+    return new Pessoa(nome, peso, altura, imc, data);
   }
 
   calcula(peso: number, altura: number): number {
