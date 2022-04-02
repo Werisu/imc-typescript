@@ -1,7 +1,9 @@
 import { Pessoas } from "../models/pessoas.js";
 
 export class PessoasView {
+    
   private elemento: HTMLElement;
+
   constructor(seletor: string) {
     this.elemento = document.querySelector(seletor);
   }

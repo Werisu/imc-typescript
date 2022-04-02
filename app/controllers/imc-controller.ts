@@ -1,6 +1,7 @@
 import { Pessoas } from './../models/pessoas.js';
 import { Pessoa } from "../models/pessoa.js";
 import { PessoasView } from '../views/pessoas-view.js';
+import { MensagemView } from '../views/mensagem-view.js';
 
 export class ImcController {
   private nome: HTMLInputElement;
@@ -10,6 +11,7 @@ export class ImcController {
   public data: Date;
   private pessoas = new Pessoas();
   private pessoasView = new PessoasView('#pessoasView');
+  private mensagemView = new MensagemView("#mensagemView");
 
   constructor() {
     this.nome = document.querySelector("#nome");
@@ -22,6 +24,7 @@ export class ImcController {
     const pessoa = this.criarPessoa();
     this.pessoas.adiciona(pessoa);
     this.pessoasView.update(this.pessoas);
+    this.mensagemView.update("Pessoa adicionado com sucesso!");
     this.limparFormulario();
   }
 
