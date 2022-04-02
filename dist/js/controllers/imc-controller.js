@@ -2,6 +2,7 @@ import { Pessoas } from './../models/pessoas.js';
 import { Pessoa } from "../models/pessoa.js";
 import { PessoasView } from '../views/pessoas-view.js';
 import { MensagemView } from '../views/mensagem-view.js';
+import { Status } from '../enums/status.js';
 export class ImcController {
     constructor() {
         this.pessoas = new Pessoas();
@@ -10,26 +11,30 @@ export class ImcController {
         this.nome = document.querySelector("#nome");
         this.peso = document.querySelector("#peso");
         this.altura = document.querySelector("#altura");
+        this.data = new Date();
         this.pessoasView.update(this.pessoas);
     }
     adiciona() {
         const pessoa = this.criarPessoa();
+        if (!this.eNomeValido(pessoa.nome)) {
+            this.mensagemView.update(`nome só pode conter letras`);
+            return;
+        }
         this.pessoas.adiciona(pessoa);
-        this.pessoasView.update(this.pessoas);
-        this.mensagemView.update("Pessoa adicionado com sucesso!");
+        this.atualizaView();
         this.limparFormulario();
     }
     criarPessoa() {
         const nome = this.nome.value;
         const peso = parseFloat(this.peso.value);
         const altura = parseFloat(this.altura.value);
-        const imc = this.calcula(peso, altura);
-        const data = new Date();
-        return new Pessoa(nome, peso, altura, imc, data);
+        this.calcula(peso, altura);
+        return new Pessoa(nome, peso, altura, this.imc, this.status, this.data);
     }
     calcula(peso, altura) {
         // IMC = 80 kg ÷ (1,80 m × 1,80 m) = 24,69 kg/m2 (Peso ideal)
         this.imc = peso / (altura * altura);
+        this.categorizacao(this.imc);
         return this.imc;
     }
     limparFormulario() {
@@ -37,5 +42,33 @@ export class ImcController {
         this.peso.value = '';
         this.altura.value = '';
         this.nome.focus();
+    }
+    eNomeValido(nome) {
+        var padrao = /[^a-zà-ú]/gi;
+        return nome.match(padrao) == null;
+    }
+    atualizaView() {
+        this.pessoasView.update(this.pessoas);
+        this.mensagemView.update("Pessoa adicionado com sucesso!");
+    }
+    categorizacao(imc) {
+        if (imc >= 18.5 && imc <= 24.9) {
+            this.status = Status.PESO_NORMAL;
+        }
+        else if (imc >= 25 && imc <= 29.9) {
+            this.status = Status.SOBREPESO;
+        }
+        else if (imc >= 30 && imc <= 34.9) {
+            this.status = Status.OBESIDADE_GRAU_1;
+        }
+        else if (imc >= 35 && imc <= 39.9) {
+            this.status = Status.OBESIDADE_GRAU_2;
+        }
+        else if (imc >= 40) {
+            this.status = Status.OBESIDADE_GRAU_3;
+        }
+        else {
+            this.status = Status.ABAIXO_DO_PESO;
+        }
     }
 }

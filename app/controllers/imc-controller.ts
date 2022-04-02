@@ -2,13 +2,15 @@ import { Pessoas } from './../models/pessoas.js';
 import { Pessoa } from "../models/pessoa.js";
 import { PessoasView } from '../views/pessoas-view.js';
 import { MensagemView } from '../views/mensagem-view.js';
+import { Status } from '../enums/status.js';
 
 export class ImcController {
   private nome: HTMLInputElement;
   private peso: HTMLInputElement;
   private altura: HTMLInputElement;
-  public imc: number;
-  public data: Date;
+  private imc: number;
+  private data: Date;
+  private status: string;
   private pessoas = new Pessoas();
   private pessoasView = new PessoasView('#pessoasView');
   private mensagemView = new MensagemView("#mensagemView");
@@ -17,36 +19,66 @@ export class ImcController {
     this.nome = document.querySelector("#nome");
     this.peso = document.querySelector("#peso");
     this.altura = document.querySelector("#altura");
+    this.data = new Date();
     this.pessoasView.update(this.pessoas);
   }
 
   adiciona(): void {
     const pessoa = this.criarPessoa();
+    if (!this.eNomeValido(pessoa.nome)) {
+      this.mensagemView.update(`nome só pode conter letras`)
+      return ;
+    }
+    
     this.pessoas.adiciona(pessoa);
-    this.pessoasView.update(this.pessoas);
-    this.mensagemView.update("Pessoa adicionado com sucesso!");
+    this.atualizaView();
     this.limparFormulario();
   }
 
-  criarPessoa(): Pessoa {
-    const nome = this.nome.value;
-    const peso = parseFloat(this.peso.value);
+  private criarPessoa(): Pessoa {
+    const nome = this.nome.value;const peso = parseFloat(this.peso.value);
     const altura = parseFloat(this.altura.value);
-    const imc = this.calcula(peso, altura);
-    const data = new Date();
-    return new Pessoa(nome, peso, altura, imc, data);
+    this.calcula(peso, altura);
+    return new Pessoa(nome, peso, altura, this.imc, this.status, this.data);
   }
 
-  calcula(peso: number, altura: number): number {
+  private calcula(peso: number, altura: number): number {
     // IMC = 80 kg ÷ (1,80 m × 1,80 m) = 24,69 kg/m2 (Peso ideal)
     this.imc = peso / (altura * altura);
+    this.categorizacao(this.imc);
     return this.imc;
   }
 
-  limparFormulario(): void{
+  private limparFormulario(): void{
     this.nome.value = '';
     this.peso.value = '';
     this.altura.value = '';
     this.nome.focus();
+  }
+
+  private eNomeValido(nome: string){
+    var padrao = /[^a-zà-ú]/gi;
+    return nome.match(padrao) == null;
+  }
+
+  private atualizaView(): void {
+    this.pessoasView.update(this.pessoas);
+    this.mensagemView.update("Pessoa adicionado com sucesso!");
+  }
+
+  private categorizacao(imc: number): void{
+    if (imc >= 18.5 && imc <= 24.9) {
+      this.status = Status.PESO_NORMAL;
+    } else if(imc >= 25 && imc <= 29.9){
+      this.status = Status.SOBREPESO;
+    } else if(imc >= 30 && imc <= 34.9){
+      this.status = Status.OBESIDADE_GRAU_1;
+    } else if(imc >= 35 && imc <= 39.9){
+      this.status = Status.OBESIDADE_GRAU_2;
+    } else if(imc >= 40){
+      this.status = Status.OBESIDADE_GRAU_3;
+    } else{
+      this.status = Status.ABAIXO_DO_PESO;
+    }
   }
 }

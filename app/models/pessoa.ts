@@ -5,6 +5,7 @@ export class Pessoa {
         readonly peso: number,
         readonly altura: number,
         readonly imc: number,
+        readonly status: string,
         readonly data: Date
     ) {}
 }

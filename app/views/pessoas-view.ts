@@ -3,7 +3,7 @@ import { View } from "./view.js";
 
 export class PessoasView extends View<Pessoas>{
 
-  template(model: Pessoas): string {
+  protected template(model: Pessoas): string {
     return `
         <table class="table table-hover table-bordered">
             <thead>
@@ -13,6 +13,7 @@ export class PessoasView extends View<Pessoas>{
                     <th>Altura</th>
                     <th>Data</th>
                     <th>IMC</th>
+                    <th>ESTADO</th>
                 </tr>
             </thead>
             <tbody>
@@ -24,6 +25,7 @@ export class PessoasView extends View<Pessoas>{
                         <td>${item.altura}</td>
                         <td>${item.data.toLocaleString()}</td>
                         <td>${item.imc}</td>
+                        <td>${item.status}</td>
                     </tr>
                     `;
                 }).join('')}

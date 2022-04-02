@@ -2,11 +2,11 @@ import { Pessoa } from './pessoa';
 export class Pessoas{
     pessoas: Array<Pessoa> = [];
 
-    adiciona(pessoa: Pessoa): void{
+    public adiciona(pessoa: Pessoa): void{
         this.pessoas.push(pessoa)
     }
 
-    lista(): ReadonlyArray<Pessoa>{
+    public lista(): ReadonlyArray<Pessoa>{
         return this.pessoas;
     }
 }

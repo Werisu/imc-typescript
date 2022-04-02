@@ -10,6 +10,7 @@ export class PessoasView extends View {
                     <th>Altura</th>
                     <th>Data</th>
                     <th>IMC</th>
+                    <th>ESTADO</th>
                 </tr>
             </thead>
             <tbody>
@@ -21,6 +22,7 @@ export class PessoasView extends View {
                         <td>${item.altura}</td>
                         <td>${item.data.toLocaleString()}</td>
                         <td>${item.imc}</td>
+                        <td>${item.status}</td>
                     </tr>
                     `;
         }).join('')}
