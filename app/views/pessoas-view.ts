@@ -1,3 +1,4 @@
+import { Status } from "../enums/status.js";
 import { Pessoas } from "../models/pessoas.js";
 import { View } from "./view.js";
 
@@ -25,7 +26,7 @@ export class PessoasView extends View<Pessoas>{
                         <td>${item.altura}</td>
                         <td>${item.data.toLocaleString()}</td>
                         <td>${item.imc}</td>
-                        <td>${item.status}</td>
+                        <td class="bg-${item.status == Status.PESO_NORMAL ? 'success' : 'danger'}">${item.status}</td>
                     </tr>
                     `;
                 }).join('')}

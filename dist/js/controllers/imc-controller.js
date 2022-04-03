@@ -15,7 +15,8 @@ export class ImcController {
         this.pessoasView.update(this.pessoas);
     }
     adiciona() {
-        const pessoa = this.criarPessoa();
+        this.calcula(parseFloat(this.peso.value), parseFloat(this.altura.value));
+        const pessoa = Pessoa.criaDe(this.nome.value, this.peso.value, this.altura.value, this.imc, this.status, this.data);
         if (!this.eNomeValido(pessoa.nome)) {
             this.mensagemView.update(`nome só pode conter letras`);
             return;
@@ -23,13 +24,6 @@ export class ImcController {
         this.pessoas.adiciona(pessoa);
         this.atualizaView();
         this.limparFormulario();
-    }
-    criarPessoa() {
-        const nome = this.nome.value;
-        const peso = parseFloat(this.peso.value);
-        const altura = parseFloat(this.altura.value);
-        this.calcula(peso, altura);
-        return new Pessoa(nome, peso, altura, this.imc, this.status, this.data);
     }
     calcula(peso, altura) {
         // IMC = 80 kg ÷ (1,80 m × 1,80 m) = 24,69 kg/m2 (Peso ideal)

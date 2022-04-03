@@ -16,15 +16,25 @@ export class ImcController {
   private mensagemView = new MensagemView("#mensagemView");
 
   constructor() {
-    this.nome = document.querySelector("#nome");
-    this.peso = document.querySelector("#peso");
-    this.altura = document.querySelector("#altura");
+    this.nome = document.querySelector("#nome") as HTMLInputElement;
+    this.peso = document.querySelector("#peso") as HTMLInputElement;
+    this.altura = document.querySelector("#altura") as HTMLInputElement;
     this.data = new Date();
     this.pessoasView.update(this.pessoas);
   }
 
   adiciona(): void {
-    const pessoa = this.criarPessoa();
+    this.calcula(parseFloat(this.peso.value), parseFloat(this.altura.value));
+    
+    const pessoa = Pessoa.criaDe(
+      this.nome.value,
+      this.peso.value,
+      this.altura.value,
+      this.imc,
+      this.status,
+      this.data
+    );
+
     if (!this.eNomeValido(pessoa.nome)) {
       this.mensagemView.update(`nome só pode conter letras`)
       return ;
@@ -33,13 +43,6 @@ export class ImcController {
     this.pessoas.adiciona(pessoa);
     this.atualizaView();
     this.limparFormulario();
-  }
-
-  private criarPessoa(): Pessoa {
-    const nome = this.nome.value;const peso = parseFloat(this.peso.value);
-    const altura = parseFloat(this.altura.value);
-    this.calcula(peso, altura);
-    return new Pessoa(nome, peso, altura, this.imc, this.status, this.data);
   }
 
   private calcula(peso: number, altura: number): number {
