@@ -26,7 +26,6 @@ export class ImcController {
         this.limparFormulario();
     }
     calcula(peso, altura) {
-        // IMC = 80 kg ÷ (1,80 m × 1,80 m) = 24,69 kg/m2 (Peso ideal)
         this.imc = peso / (altura * altura);
         this.categorizacao(this.imc);
         return this.imc;
