@@ -3,6 +3,7 @@ import { Pessoa } from "../models/pessoa.js";
 import { PessoasView } from '../views/pessoas-view.js';
 import { MensagemView } from '../views/mensagem-view.js';
 import { Status } from '../enums/status.js';
+import { logarTempoDeExecucao } from '../decorators/logar-tempo-de-execucao.js';
 
 export class ImcController {
   private nome: HTMLInputElement;
@@ -23,6 +24,7 @@ export class ImcController {
     this.pessoasView.update(this.pessoas);
   }
 
+  @logarTempoDeExecucao()
   adiciona(): void {
     this.calcula(parseFloat(this.peso.value), parseFloat(this.altura.value));
     
