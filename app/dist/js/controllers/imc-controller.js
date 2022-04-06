@@ -10,14 +10,12 @@ import { PessoasView } from '../views/pessoas-view.js';
 import { MensagemView } from '../views/mensagem-view.js';
 import { Status } from '../enums/status.js';
 import { logarTempoDeExecucao } from '../decorators/logar-tempo-de-execucao.js';
+import { domInjector } from '../decorators/dom-injector.js';
 export class ImcController {
     constructor() {
         this.pessoas = new Pessoas();
         this.pessoasView = new PessoasView('#pessoasView');
         this.mensagemView = new MensagemView("#mensagemView");
-        this.nome = document.querySelector("#nome");
-        this.peso = document.querySelector("#peso");
-        this.altura = document.querySelector("#altura");
         this.data = new Date();
         this.pessoasView.update(this.pessoas);
     }
@@ -73,5 +71,14 @@ export class ImcController {
     }
 }
 __decorate([
-    logarTempoDeExecucao()
+    domInjector('#nome')
+], ImcController.prototype, "nome", void 0);
+__decorate([
+    domInjector('#peso')
+], ImcController.prototype, "peso", void 0);
+__decorate([
+    domInjector('#altura')
+], ImcController.prototype, "altura", void 0);
+__decorate([
+    logarTempoDeExecucao(true)
 ], ImcController.prototype, "adiciona", null);

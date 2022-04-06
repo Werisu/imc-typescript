@@ -4,10 +4,14 @@ import { PessoasView } from '../views/pessoas-view.js';
 import { MensagemView } from '../views/mensagem-view.js';
 import { Status } from '../enums/status.js';
 import { logarTempoDeExecucao } from '../decorators/logar-tempo-de-execucao.js';
+import { domInjector } from '../decorators/dom-injector.js';
 
 export class ImcController {
+  @domInjector('#nome')
   private nome: HTMLInputElement;
+  @domInjector('#peso')
   private peso: HTMLInputElement;
+  @domInjector('#altura')
   private altura: HTMLInputElement;
   private imc: number;
   private data: Date;
@@ -17,14 +21,11 @@ export class ImcController {
   private mensagemView = new MensagemView("#mensagemView");
 
   constructor() {
-    this.nome = document.querySelector("#nome") as HTMLInputElement;
-    this.peso = document.querySelector("#peso") as HTMLInputElement;
-    this.altura = document.querySelector("#altura") as HTMLInputElement;
     this.data = new Date();
     this.pessoasView.update(this.pessoas);
   }
 
-  @logarTempoDeExecucao()
+  @logarTempoDeExecucao(true)
   adiciona(): void {
     this.calcula(parseFloat(this.peso.value), parseFloat(this.altura.value));
     
